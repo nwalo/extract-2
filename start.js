@@ -1,12 +1,51 @@
 require('dotenv').config()
-const express = require('express');
-const session = require('cookie-session');
-const { PORT, SERVER_SESSION_SECRET } = require('./config.js');
+const path = require('path')
+const express = require('express')
+const cookieSession = require('cookie-session')
 
-let app = express();
-app.use(express.static('wwwroot'));
-app.use(express.json())
-app.use(session({ secret: SERVER_SESSION_SECRET, maxAge: 24 * 60 * 60 * 1000 }));
-app.use('/api/auth', require('./routes/auth.js'));
-app.use('/api/hubs', require('./routes/hubs.js'));
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}...`));
+const PORT = process.env.PORT || 3000
+const config = require('./config.js')
+if (
+  config.credentials.client_id == null ||
+  config.credentials.client_secret == null
+) {
+  console.error(
+    'Missing FORGE_CLIENT_ID or FORGE_CLIENT_SECRET env. variables.',
+  )
+  return
+}
+
+let app = express()
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(
+  cookieSession({
+    name: 'forge_session',
+    keys: ['forge_secure_key'],
+    maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days, same as refresh taoken
+  }),
+)
+app.use(express.json({ limit: '50mb' }))
+app.use('/api/forge', require('./routes/oauth'))
+app.use('/api/forge', require('./routes/datamanagement'))
+app.use('/api/forge', require('./routes/user'))
+app.use('/api/forge', require('./routes/jobs'))
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(err.statusCode).json(err)
+})
+
+let data = {}
+app.post('/post/partsimony/metadata/properties', (req, res) => {
+  data = req.body.data
+  res.json(data)
+  // res.redirect('/partsimony/get/metadata/properties')
+})
+
+app.get('/partsimony/get/metadata/properties', (req, res) => {
+  res.send(data)
+  console.log('sent')
+})
+
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`)
+})

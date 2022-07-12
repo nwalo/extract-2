@@ -1,18 +1,21 @@
-let { FORGE_CLIENT_ID, FORGE_CLIENT_SECRET, FORGE_CALLBACK_URL, SERVER_SESSION_SECRET, PORT } = process.env;
-if (!FORGE_CLIENT_ID || !FORGE_CLIENT_SECRET || !FORGE_CALLBACK_URL || !SERVER_SESSION_SECRET) {
-    console.warn('Missing some of the environment variables.');
-    // process.exit(1);
-}
-const INTERNAL_TOKEN_SCOPES = ['data:read'];
-const PUBLIC_TOKEN_SCOPES = ['viewables:read'];
-PORT = PORT || 8080;
-
+// Autodesk Forge configuration
 module.exports = {
-    FORGE_CLIENT_ID,
-    FORGE_CLIENT_SECRET,
-    FORGE_CALLBACK_URL,
-    SERVER_SESSION_SECRET,
-    INTERNAL_TOKEN_SCOPES,
-    PUBLIC_TOKEN_SCOPES,
-    PORT
-};
+  // Set environment variables or hard-code here
+  credentials: {
+    client_id: process.env.FORGE_CLIENT_ID,
+    client_secret: process.env.FORGE_CLIENT_SECRET,
+    callback_url: process.env.FORGE_CALLBACK_URL,
+  },
+  scopes: {
+    // Required scopes for the server-side application
+    internal: [
+      'bucket:create',
+      'bucket:read',
+      'data:read',
+      'data:create',
+      'data:write',
+    ],
+    // Required scope for the client-side viewer
+    public: ['viewables:read'],
+  },
+}

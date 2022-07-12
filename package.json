@@ -1,18 +1,19 @@
 {
-  "name": "extract-2",
+  "name": "auth",
   "version": "1.0.0",
-  "description": "autodesk forge viewer",
+  "description": "",
   "main": "start.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node start.js"
   },
-  "author": "nwalo",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "cookie-session": "^2.0.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "forge-apis": "^0.9.0"
+    "forge-apis": "^0.9.0",
+    "multer": "^1.4.5-lts.1"
   }
 }
