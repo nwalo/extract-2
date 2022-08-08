@@ -1,19 +1,20 @@
-const express = require('express')
-const { UserProfileApi } = require('forge-apis')
+const express = require("express");
+const { UserProfileApi } = require("forge-apis");
 
-const { OAuth } = require('./common/oauth')
+const { OAuth } = require("./common/oauth");
 
-let router = express.Router()
+let router = express.Router();
 
-router.get('/user/profile', async (req, res) => {
-  const oauth = new OAuth(req.session)
-  const internalToken = await oauth.getInternalToken()
-  const user = new UserProfileApi()
-  const profile = await user.getUserProfile(oauth.getClient(), internalToken)
+router.get("/user/profile", async (req, res) => {
+  const oauth = new OAuth(req.session);
+  const internalToken = await oauth.getInternalToken();
+  const user = new UserProfileApi();
+  const profile = await user.getUserProfile(oauth.getClient(), internalToken);
+  req.session.userId = profile.body.firstName + "-" + profile.body.lastName;
   res.json({
-    name: profile.body.firstName + ' ' + profile.body.lastName,
+    name: profile.body.firstName + " " + profile.body.lastName,
     picture: profile.body.profileImages.sizeX40,
-  })
-})
+  });
+});
 
-module.exports = router
+module.exports = router;
