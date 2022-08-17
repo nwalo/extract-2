@@ -151,7 +151,7 @@ app.post("/post/partsimony/metadata/properties", (req, res) => {
 
   res.json(data);
 
-  // res.redirect('/partsimony/get/metadata/properties')
+  // res.redirect("/partsimony/get/metadata/properties");
 });
 
 app.get("/partsimony/get/metadata/properties", (req, res) => {
@@ -171,7 +171,7 @@ app.get("/retrieve/metadata/properties/:key/:componentId", (req, res) => {
         return comp.objectid == req.params.componentId;
       });
       console.log(output);
-      res.send(output);
+      // res.send(output);
     }
   });
   // Metadata
@@ -183,70 +183,113 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-const arr = [
-  {
-    id: 1,
-    name: "Component1:1",
-    properties: {
-      Mass: "619.014 g",
-      Material: "textured",
-      Name: "Component1",
-    },
-  },
-  {
-    id: 2,
-    name: "Body1",
-    properties: {
-      Mass: "619.014 g",
-      Material: "gold",
-      Name: "Body1",
-    },
-  },
-  {
-    id: 3,
-    name: "Component2:1",
-    properties: {
-      Mass: "619.014 g",
-      Material: "Steel",
-      Name: "Component2",
-    },
-  },
-  {
-    id: 4,
-    name: "flange v3",
-    properties: {
-      Mass: "619.014 g",
-      Material: "Steel",
-      Name: "flange",
-    },
-  },
-];
-
-ob = [
-  { name: "Component1:1", objectid: 2 },
-  { name: "Component2:1", objectid: 3 },
-];
-
-let n = [];
-let names = arr.map((a) => {
-  return a.name;
-});
-
-// console.log(names);
-
-for (let i = 0; i < arr.length; i++) {
-  if (ob[i]) {
-    if (names.includes(ob[i].name)) {
-      // console.log("y");
-      let index = names.indexOf(ob[i].name);
-      // console.log(names.indexOf(ob[i].name));
-      n.push(arr[index]);
+let res = [];
+Component.findOne(
+  { objectId: 47, name: "AUTODESK CAR" },
+  function (err, found) {
+    if (err) {
+      console.log("err");
     } else {
-      console.log("n");
+      if (found) {
+        console.log("found Component");
+        // console.log(found.objects);
+
+        for (const i in found.objects) {
+          if (Object.hasOwnProperty.call(found.objects, i)) {
+            const element = found.objects[i];
+            // console.log(element);
+            if (element.objects) {
+              let parentId = element.objectid;
+              element.objects.forEach((k) => {
+                k["parentId"] = parentId;
+                res.push(k);
+              });
+              // console.log("y");
+            } else {
+              res.push(element);
+              // console.log(element);
+            }
+          }
+        }
+
+        // console.log(res);
+        // found.objects.forEach((i) => {
+        //   let obid = i.objectid;
+
+        //   console.log(i.objects);
+        // });
+        // found.objects.
+      } else {
+        console.log("found not");
+      }
     }
-  } else {
-    // console.log(ob[i].name);
-    break;
   }
-}
+);
+
+// const arr = [
+//   {
+//     id: 1,
+//     name: "Component1:1",
+//     properties: {
+//       Mass: "619.014 g",
+//       Material: "textured",
+//       Name: "Component1",
+//     },
+//   },
+//   {
+//     id: 2,
+//     name: "Body1",
+//     properties: {
+//       Mass: "619.014 g",
+//       Material: "gold",
+//       Name: "Body1",
+//     },
+//   },
+//   {
+//     id: 3,
+//     name: "Component2:1",
+//     properties: {
+//       Mass: "619.014 g",
+//       Material: "Steel",
+//       Name: "Component2",
+//     },
+//   },
+//   {
+//     id: 4,
+//     name: "flange v3",
+//     properties: {
+//       Mass: "619.014 g",
+//       Material: "Steel",
+//       Name: "flange",
+//     },
+//   },
+// ];
+
+// ob = [
+//   { name: "Component1:1", objectid: 2 },
+//   { name: "Component2:1", objectid: 3 },
+// ];
+
+// let n = [];
+// let names = arr.map((a) => {
+//   return a.name;
+// });
+
+// // console.log(names);
+
+// for (let i = 0; i < arr.length; i++) {
+//   if (ob[i]) {
+//     if (names.includes(ob[i].name)) {
+//       // console.log("y");
+//       let index = names.indexOf(ob[i].name);
+//       // console.log(names.indexOf(ob[i].name));
+//       n.push(arr[index]);
+//     } else {
+//       console.log("n");
+//     }
+//   } else {
+//     // console.log(ob[i].name);
+//     break;
+//   }
+// }
 // console.log(n);

@@ -229,12 +229,12 @@ function handleMetadataGuidProps(meta, all) {
                 "x-ads-force": true,
               },
               success: function (res) {
-                // console.log(res);
+                console.log(res);
                 axios
                   .post("/post/partsimony/metadata/properties", res)
                   .then(function (response) {
                     console.log(response);
-                    // location.href = '/partsimony/get/metadata/properties'
+                    location.href = "/partsimony/get/metadata/properties";
                   })
                   .catch(function (error) {
                     console.log(error);
