@@ -17,8 +17,7 @@ function launchViewer(urn, viewableId) {
     );
     viewer.start();
 
-    console.log("s");
-    console.log(viewer.getProperties());
+    console.log("pp" + viewer.getProperties());
 
     var documentId = "urn:" + urn;
     Autodesk.Viewing.Document.load(

@@ -211,14 +211,6 @@ Component.findOne(
             }
           }
         }
-
-        // console.log(res);
-        // found.objects.forEach((i) => {
-        //   let obid = i.objectid;
-
-        //   console.log(i.objects);
-        // });
-        // found.objects.
       } else {
         console.log("found not");
       }

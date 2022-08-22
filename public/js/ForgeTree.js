@@ -44,6 +44,9 @@ $(document).ready(function () {
   });
 });
 
+// launchViewer(dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLnYzc2RVSzJQUUEyNUxhMVhZM0RMenc_dmVyc2lvbj0z);
+//
+
 function prepareUserHubsTree() {
   $("#userHubs")
     .jstree({
@@ -129,8 +132,14 @@ function prepareUserHubsTree() {
                 console.log(res);
                 if (res.status == "success") {
                   alert("Translation successful");
-                  launchViewer(response.data.urn);
+
+                  // launchViewer(
+                  //   "dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLnYzc2RVSzJQUUEyNUxhMVhZM0RMenc_dmVyc2lvbj0z",
+                  //   { ids: [] }
+                  // );
+                  launchViewer(response.data.urn, { ids: [98, 1] });
                   all.token = response.data.token.access_token;
+                  // dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLnYzc2RVSzJQUUEyNUxhMVhZM0RMenc_dmVyc2lvbj0z;
                   all.urn = response.data.urn;
                   jQuery.ajax({
                     url:
