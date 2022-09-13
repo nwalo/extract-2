@@ -18,13 +18,13 @@ if (
   return;
 }
 
-// Mongoose Database connection.
+// Mongoose Database connection.............
 mongoose.connect("mongodb://localhost:27017/partsimonyDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// Schema Definition
+// Schema Definition..................
 const componentSchema = new mongoose.Schema({
   key: String,
   name: String,
@@ -38,11 +38,11 @@ const metadataSchema = new mongoose.Schema({
   component: [],
 });
 
-// Model Definition
+// Model Definition .....................
 const Component = mongoose.model("Component", componentSchema);
 const Metadata = mongoose.model("Metadata", metadataSchema);
 
-// Express Malware Definition
+// Express Malware Definition ................
 let app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(

@@ -119,8 +119,6 @@ function prepareUserHubsTree() {
         axios
           .post("/api/forge/modelderivative/jobs", myurn)
           .then(function (response) {
-            console.log(response.data);
-
             jQuery.ajax({
               url: `https://developer.api.autodesk.com/modelderivative/v2/designdata/${response.data.urn}/manifest`,
               headers: {
@@ -134,9 +132,8 @@ function prepareUserHubsTree() {
                   alert("Translation successful");
 
                   launchViewer(response.data.urn);
-                  // launchViewer(response.data.urn, { ids: [54, 99, 98, 53] });
+                  // launchViewer(response.data.urn, { ids: [54, 99, 98, 53] }); // The id object is used to show only a specific component.
                   all.token = response.data.token.access_token;
-                  // dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLnYzc2RVSzJQUUEyNUxhMVhZM0RMenc_dmVyc2lvbj0z;
                   all.urn = response.data.urn;
                   jQuery.ajax({
                     url:
@@ -171,7 +168,6 @@ function prepareUserHubsTree() {
                 console.log(err);
               },
             });
-            // launchViewer(data.node.id)
           })
           .catch(function (error) {
             console.log(error);
@@ -240,7 +236,7 @@ function handleMetadataGuidProps(meta, all) {
                   .post("/post/partsimony/metadata/properties", res)
                   .then(function (response) {
                     console.log(response);
-                    location.href = "/partsimony/get/metadata/properties";
+                    // location.href = "/partsimony/get/metadata/properties";
                   })
                   .catch(function (error) {
                     console.log(error);
@@ -251,7 +247,6 @@ function handleMetadataGuidProps(meta, all) {
               },
             });
           }
-          // location.href = '/partsimony/get/metadata/properties'
         })
         .catch(function (error) {
           console.log(error);
@@ -261,29 +256,6 @@ function handleMetadataGuidProps(meta, all) {
       console.log(err);
     },
   });
-
-  // setTimeout(() => {
-  //   jQuery.ajax({
-  //     url: `https://developer.api.autodesk.com/modelderivative/v2/designdata/${all.urn}/metadata/${meta.guid}/properties?forceget=true`,
-  //     // url: `https://developer.api.autodesk.com/modelderivative/v2/designdata/${all.urn}/metadata/${meta.guid}`,
-  //     headers: { Authorization: "Bearer " + all.token, "x-ads-force": true },
-  //     success: function (res) {
-  //       // console.log(res);
-  //       axios
-  //         .post("/post/partsimony/metadata/properties", res)
-  //         .then(function (response) {
-  //           console.log(response);
-  //           // location.href = '/partsimony/get/metadata/properties'
-  //         })
-  //         .catch(function (error) {
-  //           console.log(error);
-  //         });
-  //     },
-  //     error: function (err) {
-  //       console.log(err);
-  //     },
-  //   });
-  // }, 2000);
 }
 
 function showUser() {

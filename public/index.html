@@ -53,15 +53,25 @@
     <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
-        <ul class="nav navbar-nav left">
+        <ul
+          class="nav navbar-nav left"
+          style="display: flex; align-items: center"
+        >
           <li>
-            <a href="http://forge.autodesk.com" target="_blank">
+            <a href="https://partsimony.com" target="_blank">
               <img
                 alt="partsimony-logo"
                 src="/images/partsimony-logo.PNG"
                 height="30"
               />
             </a>
+          </li>
+          <li>
+            <h4>
+              Hello <span style="font-weight: 700">User</span>, Choose the
+              project whose Product and Manufacturing Information you wish to
+              send to partsimony
+            </h4>
           </li>
         </ul>
       </div>
@@ -74,13 +84,13 @@
             <div
               class="panel-heading"
               data-toggle="tooltip"
-              style="padding: 0px;"
+              style="padding: 0px"
             >
               <span id="userInfo"></span>
               <span
                 id="refreshHubs"
                 class="glyphicon glyphicon-refresh"
-                style="cursor: pointer; display: none;"
+                style="cursor: pointer; display: none"
                 title="Refresh list of files"
               ></span>
               <span
@@ -93,10 +103,11 @@
                   display: none;
                 "
                 title="Sign out"
-              ></span>
+                >Sign Out</span
+              >
             </div>
             <div id="userHubs">
-              <div style="padding-top: 100px; text-align: center;">
+              <div style="padding-top: 100px; text-align: center">
                 <button
                   class="btn btn-lg btn-default"
                   id="autodeskSigninButton"
@@ -133,5 +144,5 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </body>
 
-  <iframe id="hiddenFrame" style="visibility: hidden; display: none;" />
+  <iframe id="hiddenFrame" style="visibility: hidden; display: none" />
 </html>
