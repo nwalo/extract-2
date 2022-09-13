@@ -133,11 +133,8 @@ function prepareUserHubsTree() {
                 if (res.status == "success") {
                   alert("Translation successful");
 
-                  // launchViewer(
-                  //   "dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLnYzc2RVSzJQUUEyNUxhMVhZM0RMenc_dmVyc2lvbj0z",
-                  //   { ids: [] }
-                  // );
-                  launchViewer(response.data.urn, { ids: [98, 1] });
+                  launchViewer(response.data.urn);
+                  // launchViewer(response.data.urn, { ids: [54, 99, 98, 53] });
                   all.token = response.data.token.access_token;
                   // dXJuOmFkc2sud2lwcHJvZDpmcy5maWxlOnZmLnYzc2RVSzJQUUEyNUxhMVhZM0RMenc_dmVyc2lvbj0z;
                   all.urn = response.data.urn;

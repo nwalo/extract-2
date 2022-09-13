@@ -18,13 +18,13 @@ if (
   return;
 }
 
+// Mongoose Database connection.
 mongoose.connect("mongodb://localhost:27017/partsimonyDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// SCHEMAS
-
+// Schema Definition
 const componentSchema = new mongoose.Schema({
   key: String,
   name: String,
@@ -38,11 +38,11 @@ const metadataSchema = new mongoose.Schema({
   component: [],
 });
 
-// MODEL
-
+// Model Definition
 const Component = mongoose.model("Component", componentSchema);
 const Metadata = mongoose.model("Metadata", metadataSchema);
 
+// Express Malware Definition
 let app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
@@ -70,29 +70,52 @@ app.use((err, req, res, next) => {
 });
 
 let data = {};
-let global = "";
 
+// Component Hierarchy extraction........
 app.post("/post/partsimony/component", (req, res) => {
   let result = req.body.data.objects;
   let comp;
   let compId;
   let compName;
+  let output = [];
+
+  let resObjects = result
+    .map((i) => {
+      return i.objects;
+    })
+    .flat();
+
+  resObjects.forEach((element) => {
+    if (element.objects) {
+      let parentId = element.objectid;
+      element.objects.forEach((k) => {
+        k["parentId"] = parentId;
+        output.push(k);
+      });
+    } else {
+      output.push(element);
+    }
+  });
 
   result.forEach((i) => {
     req.session.key = i.name + "-" + i.objectid;
 
     comp = new Component({
-      key: req.session.userId + "-" + req.session.key.replaceAll(" ", "-"),
+      key: req.session.userId + "-" + req.session.key.replaceAll(" ", "-"), // Use a unique identifier to create a key e.g firstName-lastName-designName-objectid
       name: i.name,
       objectId: i.objectid,
-      objects: i.objects,
+      objects: output,
     });
 
     compId = i.objectid;
     compName = i.name;
   });
 
-  Component.findOne(
+  // Output component that would be saved to the database........
+  console.log(comp);
+
+  // Saving the component to the database..........
+  /* Component.findOne(
     { objectId: compId, name: compName },
     function (err, found) {
       if (err) {
@@ -107,7 +130,7 @@ app.post("/post/partsimony/component", (req, res) => {
               comps.save(function (err) {
                 if (!err) {
                   console.log("saved component");
-                  res.json({ status: true });
+                  res.json({ status: true }); //Sends response, if true starts extraction of metadata......
                 } else {
                   console.log("didn't save");
                 }
@@ -117,11 +140,10 @@ app.post("/post/partsimony/component", (req, res) => {
         }
       }
     }
-  );
-
-  // res.json({ status: true });
+  ); */
 });
 
+// Metadata extraction ..........
 app.post("/post/partsimony/metadata/properties", (req, res) => {
   data = req.body.data;
 
@@ -131,7 +153,8 @@ app.post("/post/partsimony/metadata/properties", (req, res) => {
     component: data.collection,
   });
 
-  Metadata.findOne({ key: req.session.key }, (err, found) => {
+  // Save Metadata to the database..........
+  /* Metadata.findOne({ key: req.session.key }, (err, found) => {
     if (err) {
       console.log("err");
     } else {
@@ -147,18 +170,15 @@ app.post("/post/partsimony/metadata/properties", (req, res) => {
         console.log("yup");
       }
     }
-  });
-
-  res.json(data);
-
-  // res.redirect("/partsimony/get/metadata/properties");
+  }); */
+  // res.json(data);
 });
 
 app.get("/partsimony/get/metadata/properties", (req, res) => {
   res.send(data);
-  console.log("sent");
 });
 
+// To retrieve metadata ..........
 app.get("/retrieve/metadata/properties/:key/:componentId", (req, res) => {
   console.log(req.params.key);
 
@@ -166,7 +186,6 @@ app.get("/retrieve/metadata/properties/:key/:componentId", (req, res) => {
     if (err) {
       console.log("err");
     } else {
-      // console.log(found);
       let output = found.component.find((comp) => {
         return comp.objectid == req.params.componentId;
       });
@@ -174,7 +193,6 @@ app.get("/retrieve/metadata/properties/:key/:componentId", (req, res) => {
       // res.send(output);
     }
   });
-  // Metadata
 
   console.log("sent");
 });
@@ -182,106 +200,3 @@ app.get("/retrieve/metadata/properties/:key/:componentId", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-let res = [];
-Component.findOne(
-  { objectId: 47, name: "AUTODESK CAR" },
-  function (err, found) {
-    if (err) {
-      console.log("err");
-    } else {
-      if (found) {
-        console.log("found Component");
-        // console.log(found.objects);
-
-        for (const i in found.objects) {
-          if (Object.hasOwnProperty.call(found.objects, i)) {
-            const element = found.objects[i];
-            // console.log(element);
-            if (element.objects) {
-              let parentId = element.objectid;
-              element.objects.forEach((k) => {
-                k["parentId"] = parentId;
-                res.push(k);
-              });
-              // console.log("y");
-            } else {
-              res.push(element);
-              // console.log(element);
-            }
-          }
-        }
-      } else {
-        console.log("found not");
-      }
-    }
-  }
-);
-
-// const arr = [
-//   {
-//     id: 1,
-//     name: "Component1:1",
-//     properties: {
-//       Mass: "619.014 g",
-//       Material: "textured",
-//       Name: "Component1",
-//     },
-//   },
-//   {
-//     id: 2,
-//     name: "Body1",
-//     properties: {
-//       Mass: "619.014 g",
-//       Material: "gold",
-//       Name: "Body1",
-//     },
-//   },
-//   {
-//     id: 3,
-//     name: "Component2:1",
-//     properties: {
-//       Mass: "619.014 g",
-//       Material: "Steel",
-//       Name: "Component2",
-//     },
-//   },
-//   {
-//     id: 4,
-//     name: "flange v3",
-//     properties: {
-//       Mass: "619.014 g",
-//       Material: "Steel",
-//       Name: "flange",
-//     },
-//   },
-// ];
-
-// ob = [
-//   { name: "Component1:1", objectid: 2 },
-//   { name: "Component2:1", objectid: 3 },
-// ];
-
-// let n = [];
-// let names = arr.map((a) => {
-//   return a.name;
-// });
-
-// // console.log(names);
-
-// for (let i = 0; i < arr.length; i++) {
-//   if (ob[i]) {
-//     if (names.includes(ob[i].name)) {
-//       // console.log("y");
-//       let index = names.indexOf(ob[i].name);
-//       // console.log(names.indexOf(ob[i].name));
-//       n.push(arr[index]);
-//     } else {
-//       console.log("n");
-//     }
-//   } else {
-//     // console.log(ob[i].name);
-//     break;
-//   }
-// }
-// console.log(n);

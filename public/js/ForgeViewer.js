@@ -2,8 +2,9 @@ var viewer;
 
 // @urn the model to show
 // @viewablesId which viewables to show, applies to BIM 360 Plans folder
-function launchViewer(urn, viewableId) {
+function launchViewer(urn, vid, viewableId) {
   console.log("clicked viewer");
+  console.log(vid);
 
   var options = {
     env: "AutodeskProduction",
@@ -15,9 +16,8 @@ function launchViewer(urn, viewableId) {
       document.getElementById("forgeViewer"),
       { extensions: ["Autodesk.DocumentBrowser"] }
     );
-    viewer.start();
 
-    console.log("pp" + viewer.getProperties());
+    viewer.start();
 
     var documentId = "urn:" + urn;
     Autodesk.Viewing.Document.load(
@@ -28,13 +28,16 @@ function launchViewer(urn, viewableId) {
   });
 
   function onDocumentLoadSuccess(doc) {
-    console.log("true");
     // if a viewableId was specified, load that view, otherwise the default view
     var viewables = viewableId
       ? doc.getRoot().findByGuid(viewableId)
       : doc.getRoot().getDefaultGeometry();
-    viewer.loadDocumentNode(doc, viewables).then((i) => {
+
+    // var options = { ids: [], skipPropertyDb: true };
+
+    viewer.loadDocumentNode(doc, viewables, vid).then((i) => {
       // any additional action here?
+      // doc.hide([98]);
     });
   }
 
