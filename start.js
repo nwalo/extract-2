@@ -175,7 +175,8 @@ app.post("/post/partsimony/metadata/properties", (req, res) => {
 });
 
 app.get("/partsimony/get/metadata/properties", (req, res) => {
-  res.send(data);
+  // res.send(data);
+  res.send("Welcome to Partsimony Supply chain");
 });
 
 // To retrieve metadata ..........

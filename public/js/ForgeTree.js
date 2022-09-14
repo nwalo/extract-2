@@ -235,8 +235,8 @@ function handleMetadataGuidProps(meta, all) {
                 axios
                   .post("/post/partsimony/metadata/properties", res)
                   .then(function (response) {
-                    console.log(response);
-                    // location.href = "/partsimony/get/metadata/properties";
+                    // console.log(response);
+                    location.href = "/partsimony/get/metadata/properties";
                   })
                   .catch(function (error) {
                     console.log(error);
